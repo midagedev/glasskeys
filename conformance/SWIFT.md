@@ -17,6 +17,20 @@ TypeScript. Pick whichever is cheapest for your project:
 Add them as `.copy("vectors")` in the test target's `resources:` so
 `Bundle.module.url(forResource:withExtension:subdirectory:)` finds them.
 
+**Assert `vectors/MANIFEST.json` against what you loaded.** A copy is a
+snapshot, and the way a snapshot goes wrong is quietly: one file lost to a
+bad merge or a partial re-vendor, and the run gets smaller instead of red.
+The manifest lists every vector, so the set is checkable:
+
+```swift
+XCTAssertEqual(loadedVectorIDs.sorted(), manifest.vectors, "vendored vectors/ is not the full set")
+```
+
+Record the upstream commit next to the files (an `ORIGIN.txt` is enough) and
+assert it too, so the version you conform to is a fact in the test output
+rather than a memory. The manifest catches a dropped vector; only comparing
+that commit against upstream catches a copy that has gone stale.
+
 ## The shape
 
 ```swift

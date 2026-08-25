@@ -110,9 +110,19 @@ from:
 }
 ```
 
-Provenance is enforced, not decorative: a vector with no `source.repo` fails
-the suite. A behaviour nobody measured looks identical to one somebody
-invented, six months later.
+Provenance is enforced, not decorative. A vector with no `source.repo` fails
+the suite, one that names no tests must say `"composed": true` instead, and
+`npm run check:provenance` opens the cited files and looks for the cited test
+names — a paraphrase that cannot be followed is the same dead end as no
+citation at all. (That check needs the consuming repos on the machine; where
+they are absent it says so, with a count, rather than passing quietly.) A
+behaviour nobody measured looks identical to one somebody invented, six
+months later.
+
+`vectors/MANIFEST.json` lists the set. A consumer that copies these files
+into another language's test bundle asserts its loaded vectors against it, so
+a dropped file is a failure rather than a smaller green run — a smaller green
+run being indistinguishable from a complete one.
 
 `npm test` runs them against `src/`. `conformance/SWIFT.md` shows how an
 XCTest target runs the same files against Swift types — with, for the
@@ -120,10 +130,10 @@ machines this was lifted from, **no production code change at all**.
 
 ### Adding one
 
-Add the JSON file; that is the whole procedure. The harness discovers
-vectors by directory and **fails on a suite it has no runner for**, rather
-than skipping it — a harness that silently skipped unknown suites would
-report green while pinning nothing.
+Add the JSON file and run `npm run manifest`. The harness discovers vectors
+by directory and **fails on a suite it has no runner for**, rather than
+skipping it — a harness that silently skipped unknown suites would report
+green while pinning nothing.
 
 ## The numbers, and why they are not options
 

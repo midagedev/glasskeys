@@ -11,5 +11,9 @@ jobs:
         with: { node-version: '20' }
       - run: npm ci
       - run: npm run check
+      - run: npm run check:manifest
+      # The consuming repos are not here, so this reports what it could not
+      # resolve and passes. It is in CI to keep the count visible.
+      - run: npm run check:provenance
       - run: npm test
       - run: npm run build:check

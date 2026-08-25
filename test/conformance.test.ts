@@ -40,14 +40,18 @@ type Step = {
 type Vector = {
   suite: string
   id: string
-  source: { repo: string; file?: string; tests?: string[] }
+  source: { repo: string; file?: string; tests?: string[]; composed?: boolean }
   steps: Step[]
   note?: string
 }
 
 function loadVectors(): Vector[] {
   const out: Vector[] = []
-  for (const suite of readdirSync(vectorsDir)) {
+  for (const entry of readdirSync(vectorsDir, { withFileTypes: true })) {
+    // MANIFEST.json sits beside the suite directories, so only directories
+    // are suites.
+    if (!entry.isDirectory()) continue
+    const suite = entry.name
     const dir = join(vectorsDir, suite)
     for (const file of readdirSync(dir)) {
       if (!file.endsWith('.json')) continue
@@ -177,5 +181,41 @@ describe('vector hygiene', () => {
   test('ids are unique across suites', () => {
     const ids = vectors.map((v) => `${v.suite}/${v.id}`)
     expect(new Set(ids).size).toBe(ids.length)
+  })
+
+  test('a vector either names the tests it was lifted from or says it was composed', () => {
+    // "source.file with an empty tests list" reads like a citation and is
+    // not one. `composed: true` is the honest form, and it is the difference
+    // between a behaviour somebody measured and one somebody assembled.
+    for (const v of vectors) {
+      if (v.source.composed) continue
+      expect(
+        v.source.tests?.length ?? 0,
+        `${v.suite}/${v.id}: source.tests (or source.composed)`,
+      ).toBeGreaterThan(0)
+    }
+  })
+
+  test('MANIFEST.json is the vector set, so a consumer can prove it copied all of them', () => {
+    // The gap this closes: a Swift/other-language consumer copies `vectors/`
+    // into its test bundle and one file is dropped — by a bad merge, a
+    // partial re-vendor, or a hurried `rm`. Its harness fails on an unknown
+    // *suite*, but a missing *vector* just makes the run smaller, and a
+    // smaller green run looks exactly like a complete one.
+    //
+    // What it does not close: staleness. A consumer holding an old manifest
+    // beside its matching old vectors is internally consistent. Only
+    // comparing the pinned commit against upstream catches that.
+    const manifest = JSON.parse(readFileSync(join(vectorsDir, 'MANIFEST.json'), 'utf8')) as {
+      count: number
+      suites: Record<string, number>
+      vectors: string[]
+    }
+    const onDisk = vectors.map((v) => `${v.suite}/${v.id}`).sort()
+    expect(manifest.vectors, 'MANIFEST.vectors — run `npm run manifest`').toEqual(onDisk)
+    expect(manifest.count).toBe(onDisk.length)
+    const counts: Record<string, number> = {}
+    for (const v of vectors) counts[v.suite] = (counts[v.suite] ?? 0) + 1
+    expect(manifest.suites).toEqual(counts)
   })
 })
