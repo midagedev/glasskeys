@@ -29,7 +29,8 @@
     "build": "tsc -p tsconfig.build.json",
     "test": "vitest run",
     "check": "tsc --noEmit",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "build:check": "npm run build && git diff --exit-code -- dist"
   },
   "devDependencies": {
     "@types/node": "^26.3.0",

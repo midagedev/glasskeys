@@ -1,2 +1,8 @@
 node_modules/
-dist/
+
+# dist/ is NOT ignored. This package is consumed from git, not from a
+# registry (gadak's phone pins it by commit sha), and npm's allow-scripts
+# policy can decline to run `prepare` on a git dependency — which leaves the
+# consumer with a package that has no entry point and an install that looked
+# like it worked. Shipping the build removes that failure mode entirely.
+# `npm run build:check` in CI is what keeps the committed output honest.
