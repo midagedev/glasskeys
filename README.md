@@ -17,6 +17,15 @@ so a second implementation in a second language cannot quietly drift.
 npm i glasskeys
 ```
 
+```swift
+.package(url: "https://github.com/midagedev/glasskeys.git", from: "0.2.0")
+```
+
+Two implementations, one specification. The TypeScript one and the Swift one
+run the same golden vectors in the same CI, because a phone app in a webview
+and a phone app in Swift disagreeing about what a held arrow key does is
+exactly the bug this exists to prevent.
+
 ## What is in here
 
 | | |
@@ -25,8 +34,14 @@ npm i glasskeys
 | **M2 · hold-to-repeat** | One emission on touch-down, then 400 ms, then every 45 ms. Clock-injected; the machine owns no timer. |
 | **M3 · composition gate** | While an IME is composing, withhold; on commit, emit once. Four abstract events, so a DOM app and a UIKit app feed the same machine. |
 | **M4 · flush barrier** | Commit what is held *before* emitting a control key, and drop the control if the flush failed. |
-| **catalog** | `catalog/keys.json` — key identity and which keys repeat. Data, readable from any language. |
+| **catalog** | `catalog/keys.json` — key identity and which keys repeat. Data, readable from any language; `CatalogKey` in Swift, `catalog` in TypeScript. |
 | **vectors** | `vectors/**/*.json` — the specification. See below. |
+
+Both languages ship all four: `src/` (TypeScript, npm) and
+`Sources/Glasskeys` (Swift, SwiftPM). The Swift API is idiomatic rather than a
+transliteration — `RepeatCadence` is generic over your own key type so a key
+that carries an X11 keysym or a control byte stays yours — but the behaviour
+is the vectors', on both sides.
 
 ## What is deliberately not in here
 

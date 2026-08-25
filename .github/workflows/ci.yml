@@ -17,3 +17,12 @@ jobs:
       - run: npm run check:provenance
       - run: npm test
       - run: npm run build:check
+
+  swift:
+    # The Swift half runs the same vectors/ files. If these two jobs disagree,
+    # that is the drift this repository exists to catch.
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - run: swift build
+      - run: swift test

@@ -1,8 +1,10 @@
 node_modules/
+.build/
+.swiftpm/
 
-# dist/ is NOT ignored. This package is consumed from git, not from a
-# registry (gadak's phone pins it by commit sha), and npm's allow-scripts
-# policy can decline to run `prepare` on a git dependency — which leaves the
-# consumer with a package that has no entry point and an install that looked
-# like it worked. Shipping the build removes that failure mode entirely.
+# dist/ is NOT ignored. The published package now comes from the npm registry,
+# but a consumer can still pin this repository by commit sha, and npm's
+# allow-scripts policy can decline to run `prepare` on a git dependency — which
+# leaves that consumer with a package that has no entry point and an install
+# that looked like it worked. Shipping the build removes that failure mode.
 # `npm run build:check` in CI is what keeps the committed output honest.

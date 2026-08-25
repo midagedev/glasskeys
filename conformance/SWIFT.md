@@ -4,10 +4,20 @@ The vectors are JSON on purpose: `JSONDecoder` reads them, `vitest` reads
 them, and neither side needs the other's toolchain. This is what a Swift
 consumer does with them.
 
+## First: you may not need this
+
+There is a Swift package now. `.package(url: "https://github.com/midagedev/glasskeys.git", from: "0.2.0")`
+gives you the four machines, and `swift test` in this repository already runs
+every vector against them — an app that depends on the package inherits that
+and needs no conformance target of its own.
+
+The rest of this file is for the other case: an app that keeps its own Swift
+types, because they predate the package or because they are woven into its own
+key enum, and wants to prove they still agree with the shared decisions.
+
 ## Getting the files
 
-There is no Swift package to depend on — this repository ships JSON and
-TypeScript. Pick whichever is cheapest for your project:
+Pick whichever is cheapest for your project:
 
 1. **Copy or submodule `vectors/` into your test target's resources.** Zero
    production code change; the vectors travel with your test bundle.
