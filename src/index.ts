@@ -1,6 +1,5 @@
 /*
- * touch-remote-input — the part of driving a far-away machine from a
- * touchscreen that is the same no matter what is on the other end.
+ * glasskeys — the state machines behind a keyboard drawn on glass.
  *
  * Four state machines and a key catalog. No encoder, no transport, no UI:
  * see README.md for why that line is where it is.

@@ -1,19 +1,20 @@
-# touch-remote-input
+# glasskeys
 
-The part of driving a far-away machine from a touchscreen that is the same
-whatever is on the other end.
+The state machines behind a keyboard drawn on glass.
 
-A phone has no Ctrl key you can hold, no key repeat, no Escape, and an IME
-that builds one character out of several events. The far end — a VNC server,
-a shell, a remote editor — expects a keyboard. Every app that bridges that
-gap ends up writing the same four state machines, and each one has a boundary
-that is easy to get almost right.
+Keys on glass are not keys. There is no Ctrl you can hold down, nothing
+repeats while you press it, there is no Escape at all, and an IME builds one
+character out of several events before any of it is real. Whatever reads
+those keystrokes — a VNC server, a shell, a remote editor, a local canvas —
+expects a keyboard. Every app that bridges that gap ends up writing the same
+four state machines, and each one has a boundary that is easy to get almost
+right.
 
 This package is those four machines, plus the golden vectors that pin them,
 so a second implementation in a second language cannot quietly drift.
 
 ```
-npm i touch-remote-input
+npm i glasskeys
 ```
 
 ## What is in here
@@ -49,7 +50,7 @@ a larger aspirational one.
 ## Using it
 
 ```ts
-import { StickyModifiers, RepeatCadence, CompositionGate, barrierSteps, repeatable } from 'touch-remote-input'
+import { StickyModifiers, RepeatCadence, CompositionGate, barrierSteps, repeatable } from 'glasskeys'
 
 const sticky = new StickyModifiers()
 const cadence = new RepeatCadence({ repeatable })

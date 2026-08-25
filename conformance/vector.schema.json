@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/midagedev/touch-remote-input/conformance/vector.schema.json",
-  "title": "touch-remote-input golden vector",
+  "$id": "https://github.com/midagedev/glasskeys/conformance/vector.schema.json",
+  "title": "glasskeys golden vector",
   "description": "One conformance case: a sequence of inputs at explicit millisecond times and the exact intents expected out. Every consuming implementation, in any language, must produce these.",
   "type": "object",
   "required": ["suite", "id", "source", "steps"],
@@ -25,7 +25,15 @@
       "properties": {
         "repo": { "type": "string" },
         "file": { "type": "string" },
-        "tests": { "type": "array", "items": { "type": "string" } }
+        "tests": {
+          "description": "Exact test names in `file`, resolvable by `npm run check:provenance`. A behaviour that was composed here rather than lifted says so with `composed` instead of naming tests it does not have.",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "composed": {
+          "description": "True when this vector combines behaviours that were each measured elsewhere, rather than being lifted from one test. `file` then points at the nearest relative, not at a test that asserts this case.",
+          "type": "boolean"
+        }
       }
     },
     "steps": {

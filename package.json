@@ -1,7 +1,7 @@
 {
-  "name": "touch-remote-input",
+  "name": "glasskeys",
   "version": "0.1.0",
-  "description": "The part of driving a far-away machine from a touchscreen that is the same whatever is on the other end: sticky modifiers, hold-to-repeat, the composition gate, and the flush barrier \u2014 with golden vectors two implementations can both run.",
+  "description": "The state machines behind a soft keyboard: sticky modifiers, hold-to-repeat, the composition gate, and the flush barrier. Intents out \u2014 no UI, no transport, no encoder \u2014 with golden vectors two implementations in two languages can both run.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/src/index.js",
@@ -29,6 +29,9 @@
     "build": "tsc -p tsconfig.build.json",
     "test": "vitest run",
     "check": "tsc --noEmit",
+    "check:manifest": "node scripts/manifest.mjs --check",
+    "manifest": "node scripts/manifest.mjs --write",
+    "check:provenance": "node scripts/check-provenance.mjs",
     "prepare": "npm run build",
     "build:check": "npm run build && git diff --exit-code -- dist"
   },
@@ -39,13 +42,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/midagedev/touch-remote-input.git"
+    "url": "git+https://github.com/midagedev/glasskeys.git"
   },
   "keywords": [
+    "soft-keyboard",
+    "onscreen-keyboard",
     "touchscreen",
-    "remote-input",
-    "ime",
     "sticky-modifiers",
+    "key-repeat",
+    "ime",
+    "composition",
+    "remote-input",
     "vnc",
     "pty",
     "terminal"
