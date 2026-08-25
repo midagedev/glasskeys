@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/midagedev/touch-remote-input/conformance/vector.schema.json",
+  "title": "touch-remote-input golden vector",
+  "description": "One conformance case: a sequence of inputs at explicit millisecond times and the exact intents expected out. Every consuming implementation, in any language, must produce these.",
+  "type": "object",
+  "required": ["suite", "id", "source", "steps"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "suite": {
+      "description": "Which machine this drives. The harness must have a runner for it — an unknown suite is an error, never a skip.",
+      "enum": ["sticky", "cadence", "flush", "composition"]
+    },
+    "id": {
+      "description": "Unique within the suite, and readable as a sentence about the behaviour.",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "note": { "type": "string", "description": "Why this case matters." },
+    "source": {
+      "description": "Where the behaviour was measured. Required: a vector with no provenance is indistinguishable from one somebody invented.",
+      "type": "object",
+      "required": ["repo"],
+      "properties": {
+        "repo": { "type": "string" },
+        "file": { "type": "string" },
+        "tests": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["t", "in", "expect"],
+        "additionalProperties": false,
+        "properties": {
+          "t": {
+            "description": "Milliseconds from the start of this vector. Not wall-clock: the implementation injects it.",
+            "type": "integer",
+            "minimum": 0
+          },
+          "in": {
+            "type": "object",
+            "required": ["op"],
+            "properties": {
+              "op": {
+                "enum": [
+                  "noop", "tap", "consume", "clear",
+                  "press", "tick", "release", "stop",
+                  "control",
+                  "compose-start", "compose-update", "compose-end", "plain"
+                ]
+              },
+              "mod": { "enum": ["control", "alt", "shift", "meta"] },
+              "key": { "type": "string" },
+              "text": { "type": "string" },
+              "mods": { "type": "array", "items": { "enum": ["control", "alt", "shift", "meta"] } },
+              "hasMarked": { "type": "boolean" },
+              "pending": { "enum": ["not-needed", "succeeded", "failed"] }
+            }
+          },
+          "expect": {
+            "description": "Assertions for this step. Absent keys are not asserted; `slots` may be partial, `intents` and `active` are exact.",
+            "type": "object",
+            "properties": {
+              "slots": {
+                "type": "object",
+                "additionalProperties": { "enum": ["idle", "armed", "locked"] }
+              },
+              "active": { "type": "array", "items": { "enum": ["control", "alt", "shift", "meta"] } },
+              "intents": { "type": "array", "items": { "type": "object", "required": ["op"] } },
+              "held": { "type": ["string", "null"] },
+              "composing": { "type": "boolean" },
+              "note": { "type": "string" }
+            }
+          },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  }
+}

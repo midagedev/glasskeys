@@ -1,0 +1,25 @@
+/*
+ * touch-remote-input — the part of driving a far-away machine from a
+ * touchscreen that is the same no matter what is on the other end.
+ *
+ * Four state machines and a key catalog. No encoder, no transport, no UI:
+ * see README.md for why that line is where it is.
+ */
+
+export type { Intent, KeyId, ModifierId } from './types.js'
+export { MODIFIER_IDS, sortMods } from './types.js'
+
+export { StickyModifiers, LOCK_WINDOW_MS } from './sticky.js'
+export type { SlotState } from './sticky.js'
+
+export { RepeatCadence, INITIAL_DELAY_MS, REPEAT_INTERVAL_MS } from './cadence.js'
+export type { CadenceKeys } from './cadence.js'
+
+export { CompositionGate } from './composition.js'
+export type { CompositionEvent } from './composition.js'
+
+export { barrierSteps, shouldEmitAfterFlush } from './flush.js'
+export type { BarrierInput, PendingFlush } from './flush.js'
+
+export { catalog, catalogKeys, isCatalogKey, repeatable } from './catalog.js'
+export type { Catalog, CatalogKey } from './catalog.js'

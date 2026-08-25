@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "note": "Key identity and repeat behaviour only. Labels, glyphs, strip order, VoiceOver copy and every byte or keysym belong to the consuming app — a shared catalog that carried those would force one app's chrome onto the other. `repeatable` is here because it is a *behaviour* contract the cadence machine reads, not a presentation choice.",
+  "modifiers": ["control", "alt", "shift", "meta"],
+  "keys": [
+    { "id": "escape", "repeatable": false },
+    { "id": "tab", "repeatable": false },
+    { "id": "home", "repeatable": false },
+    { "id": "end", "repeatable": false },
+    { "id": "pageUp", "repeatable": false },
+    { "id": "pageDown", "repeatable": false },
+    { "id": "insert", "repeatable": false },
+    { "id": "delete", "repeatable": true },
+    { "id": "arrowUp", "repeatable": true },
+    { "id": "arrowDown", "repeatable": true },
+    { "id": "arrowLeft", "repeatable": true },
+    { "id": "arrowRight", "repeatable": true }
+  ]
+}

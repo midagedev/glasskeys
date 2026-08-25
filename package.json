@@ -1,0 +1,52 @@
+{
+  "name": "touch-remote-input",
+  "version": "0.1.0",
+  "description": "The part of driving a far-away machine from a touchscreen that is the same whatever is on the other end: sticky modifiers, hold-to-repeat, the composition gate, and the flush barrier \u2014 with golden vectors two implementations can both run.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./catalog/keys.json": "./catalog/keys.json",
+    "./vectors/*": "./vectors/*"
+  },
+  "files": [
+    "dist",
+    "src",
+    "catalog",
+    "vectors",
+    "conformance",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "check": "tsc --noEmit",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^26.3.0",
+    "typescript": "^5.8.3",
+    "vitest": "^4.1.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/midagedev/touch-remote-input.git"
+  },
+  "keywords": [
+    "touchscreen",
+    "remote-input",
+    "ime",
+    "sticky-modifiers",
+    "vnc",
+    "pty",
+    "terminal"
+  ]
+}
