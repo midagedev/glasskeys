@@ -1,6 +1,6 @@
 {
   "name": "glasskeys",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The state machines behind a soft keyboard: sticky modifiers, hold-to-repeat, the composition gate, and the flush barrier. Intents out \u2014 no UI, no transport, no encoder \u2014 with golden vectors two implementations in two languages can both run.",
   "license": "MIT",
   "type": "module",
