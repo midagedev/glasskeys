@@ -145,6 +145,24 @@ reason: a value that differed between two consumers would make the shared
 vectors unrunnable, and the vectors are the only thing holding the two
 implementations together.
 
+## Releasing
+
+Bump `version` in `package.json`, then push the matching tag:
+
+```
+git tag v0.1.1 && git push origin v0.1.1
+```
+
+`.github/workflows/release.yml` re-runs every gate, refuses a tag that
+disagrees with `package.json`, and publishes with `--provenance`, so the
+tarball on npm carries a verifiable link back to the commit and the workflow
+that built it. It needs one repository secret, `NPM_TOKEN` — a granular
+access token scoped to this package, write, with 2FA bypass. `workflow_dispatch`
+runs the whole thing without publishing.
+
+Publishing from a laptop works and produces no provenance, which is the
+reason not to.
+
 ## Provenance
 
 The machines are lifted from **naru-remote**'s `RemoteInputDock`, where they
