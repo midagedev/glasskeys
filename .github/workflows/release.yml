@@ -32,7 +32,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          # Not 20: trusted publishing needs npm 11.5.1 or newer, the Node 20
+          # image ships npm 10, and `npm install -g npm@latest` cannot fix it
+          # because current npm refuses to install on Node 20 at all. The
+          # release runs on a newer runtime than the package's floor on
+          # purpose; `engines` still says >=20.19 for consumers.
+          node-version: '24'
           cache: npm
           registry-url: 'https://registry.npmjs.org'
 
@@ -57,13 +62,8 @@ jobs:
           fi
           echo "releasing $pkg"
 
-      # Trusted publishing needs npm 11.5.1 or newer; the Node 20 image ships
-      # npm 10, which would fail with an authentication error that reads like a
-      # misconfigured trust relationship rather than an old client.
-      - name: Use an npm that speaks OIDC
-        run: |
-          npm install -g npm@latest
-          npm --version
+      - name: Record the npm that will publish
+        run: npm --version
 
       - name: Publish (dry run)
         run: npm publish --access public --provenance --dry-run
