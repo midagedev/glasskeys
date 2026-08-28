@@ -1,6 +1,7 @@
 {
   "suite": "composition",
   "id": "sticky-modifiers-ride-committed-text",
+  "applies_to": ["pty"],
   "source": {
     "repo": "gadak",
     "file": "mobile/src/lib/terminal/ime.test.ts",
@@ -32,5 +33,5 @@
       }
     }
   ],
-  "note": "On a shell, an armed Ctrl followed by a typed letter is how a person sends Ctrl-C from a touchscreen. The encoder decides what that becomes; the gate only has to carry the modifiers through."
+  "note": "On a shell, an armed Ctrl followed by a typed letter is how a person sends Ctrl-C from a touchscreen. The encoder decides what that becomes; the gate only has to carry the modifiers through. Scoped applies_to pty (gadak GDK-949): on a VNC unicode-insertion pipeline a committed IME unit must never become a control code, so an app conforming at that boundary rightly emits with empty modifiers — an intended difference, not a drift. The machines themselves still carry modifiers through everywhere; both library harnesses run this vector unconditionally."
 }

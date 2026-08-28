@@ -142,6 +142,28 @@ silently skips what it cannot run is the failure this whole arrangement
 exists to prevent — which is why the TypeScript harness fails on an unknown
 suite instead of ignoring it.
 
+## `applies_to` — when the difference is intended (gadak GDK-949)
+
+A vector may carry an `applies_to` array naming the emission boundary its
+expectation assumes. Today the one scope is `"pty"`:
+`composition/sticky-modifiers-ride-committed-text` pins that armed modifiers
+ride committed text — correct where the output is a PTY (that is how a
+touchscreen sends Ctrl-C), and deliberately wrong where the output is VNC
+unicode insertion (a committed IME unit must never become a control code).
+Neither implementation is drifting; the policies differ *after* the gate.
+
+Rules for a conformance harness:
+
+- **The library's own harnesses ignore `applies_to`** and run everything —
+  they test the machines, and the machines carry modifiers through
+  everywhere.
+- **An app-level harness declares its scope** (say, `let scope = "vnc"`),
+  runs every vector with no `applies_to`, runs those whose list contains its
+  scope, and skips the rest *by name* in the test output. That replaces
+  skipping a whole suite because one vector cannot bind you.
+- A vector with `applies_to` naming only scopes you do not have still counts
+  toward the MANIFEST set check — you loaded it; you just did not bind it.
+
 ## Wiring it into CI
 
 Run it from day one, before the other implementation starts depending on the

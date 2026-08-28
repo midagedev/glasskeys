@@ -18,6 +18,12 @@
       "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
     },
     "note": { "type": "string", "description": "Why this case matters." },
+    "applies_to": {
+      "description": "Consumer scopes this vector binds, absent = every consumer. The library's own machine harnesses (test/conformance.test.ts, GoldenVectorTests) always run everything — the machines carry state through regardless of what an app does downstream. An APP-level conformance harness declares its scope and skips vectors that name a different one, instead of skipping whole suites. Motivating case (gadak GDK-949): sticky modifiers riding committed text is correct on a PTY (that is how a touchscreen sends Ctrl-C) and deliberately wrong on VNC unicode injection (a committed IME unit must not become a control code) — the difference is app policy after the gate, not a machine disagreement.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "enum": ["pty"] }
+    },
     "source": {
       "description": "Where the behaviour was measured. Required: a vector with no provenance is indistinguishable from one somebody invented.",
       "type": "object",

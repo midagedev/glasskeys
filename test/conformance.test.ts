@@ -43,7 +43,17 @@ type Vector = {
   source: { repo: string; file?: string; tests?: string[]; composed?: boolean }
   steps: Step[]
   note?: string
+  // Consumer scopes this vector binds (conformance/SWIFT.md, "applies_to").
+  // THIS harness ignores it and runs everything: it tests the machines, and
+  // the machines behave the same at every emission boundary. Only app-level
+  // conformance harnesses filter by their declared scope.
+  applies_to?: string[]
 }
+
+// The scopes the schema knows. A typo here would make an app-level harness
+// silently bind (or silently skip) the wrong vectors — the schema is not
+// machine-enforced, so this is the guard.
+const KNOWN_SCOPES = ['pty']
 
 function loadVectors(): Vector[] {
   const out: Vector[] = []
@@ -65,6 +75,16 @@ function loadVectors(): Vector[] {
 }
 
 const vectors = loadVectors()
+
+describe('applies_to', () => {
+  test('every scope tag is one the schema knows', () => {
+    for (const v of vectors) {
+      for (const scope of v.applies_to ?? []) {
+        expect(KNOWN_SCOPES, `${v.suite}/${v.id}: unknown scope "${scope}"`).toContain(scope)
+      }
+    }
+  })
+})
 
 const mods = (s: Step['in'] | Step['expect']): ModifierId[] =>
   ((s.mods as ModifierId[]) ?? [])
